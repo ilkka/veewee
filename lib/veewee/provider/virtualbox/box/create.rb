@@ -51,7 +51,7 @@ module Veewee
         def get_vm_location
           command="#{@vboxcmd}  list  systemproperties"
           shell_results=shell_exec("#{command}",{:mute => true})
-          location=shell_results.stdout.split(/\n/).grep(/Default machine/)[0].split(":")[1].strip
+          location=shell_results.stdout.split(/\n/).grep(/Default machine/)[0].split(":")[1..-1].join(':').strip
           return location
         end
 

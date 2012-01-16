@@ -30,11 +30,10 @@ module Veewee
                 result.stdout+=l
                 env.ui.info(l,{:new_line => false})  unless options[:mute]
               }
-              result.status=Process.waitpid2(p.pid)[1].exitstatus
-              if result.status!=0
-                env.ui.error "Exit status was not 0 but #{result.status}" unless options[:mute]
-              end
             }
+            if $?.exitstatus != 0
+              env.ui.error "Exit status was not 0 but #{$?.status}" unless options[:mute]
+            end
             return result
           end
 

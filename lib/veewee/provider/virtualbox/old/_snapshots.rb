@@ -8,11 +8,11 @@ module Veewee
     module Virtualbox
 
       def remove_snapshot_vmachine(vmname,snapname)
-        Veewee::Shell.execute("#{@vboxcmd} snapshot '#{vmname}' delete '#{snapname}'")
+        Veewee::Shell.execute("#{@vboxcmd} snapshot \"#{vmname}\" delete \"#{snapname}\"")
       end
 
       def create_snapshot_vmachine(vmname,snapname)
-        Veewee::Shell.execute("#{@vboxcmd} snapshot '#{vmname}' take '#{snapname}'")
+        Veewee::Shell.execute("#{@vboxcmd} snapshot \"#{vmname}\" take \"#{snapname}\"")
       end
 
       def load_snapshot_vmachine(vmname,snapname)
@@ -21,10 +21,10 @@ module Veewee
           stop_vmachine(vmname)
         end
 
-        Veewee::Shell.execute("#{@vboxcmd} snapshot '#{vmname}' restore '#{snapname}'")
+        Veewee::Shell.execute("#{@vboxcmd} snapshot \"#{vmname}\" restore \"#{snapname}\"")
         #sometimes it takes some time to shutdown
         sleep 2
-        Veewee::Shell.execute("#{@vboxcmd} startvm '#{vmname}'")
+        Veewee::Shell.execute("#{@vboxcmd} startvm \"#{vmname}\"")
       end
 
       def snapshot_exists(vmname,snapname)
@@ -51,7 +51,7 @@ module Veewee
 
         savestate_recover=false
         if (state_vmachine(vmname)=="running")
-          Veewee::Shell.execute("#{@vboxcmd} controlvm '#{vmname}' savestate")
+          Veewee::Shell.execute("#{@vboxcmd} controlvm \"#{vmname}\" savestate")
           savestate_recover=true
         end
 
@@ -68,7 +68,7 @@ module Veewee
 
         sleep 2
 
-        Veewee::Shell.execute("#{@vboxcmd} startvm '#{vmname}'")
+        Veewee::Shell.execute("#{@vboxcmd} startvm \"#{vmname}\"")
 
         if (savestate_recover)
           #Recovering from savestate nukes the network! This trick seem to work
@@ -76,9 +76,9 @@ module Veewee
           #http://www.virtualbox.org/ticket/5666
           #http://www.virtualbox.org/ticket/5654
           #This is supposed to be fixed: http://www.virtualbox.org/changeset/25205 but alas
-          Veewee::Shell.execute("#{@vboxcmd} controlvm '#{vmname}' nic1 nat")
-          Veewee::Shell.execute("#{@vboxcmd} controlvm '#{vmname}' setlinkstate1 off")
-          Veewee::Shell.execute("#{@vboxcmd} controlvm '#{vmname}' setlinkstate1 on")
+          Veewee::Shell.execute("#{@vboxcmd} controlvm \"#{vmname}\" nic1 nat")
+          Veewee::Shell.execute("#{@vboxcmd} controlvm \"#{vmname}\" setlinkstate1 off")
+          Veewee::Shell.execute("#{@vboxcmd} controlvm \"#{vmname}\" setlinkstate1 on")
           sleep 2
 
           #hmmm, virtualbox => when recovering from a restore , it looses the nat settings!!! So we need to do this again!!
@@ -94,7 +94,7 @@ module Veewee
       def self.list_snapshots(vmname)
         @vboxcmd=Veewee::Environment.determine_vboxcmd
 
-        snapshotresult=Veewee::Shell.execute("#{@vboxcmd} showvminfo --machinereadable '#{vmname}' |grep ^SnapshotName| cut -d '=' -f 2").stdout
+        snapshotresult=Veewee::Shell.execute("#{@vboxcmd} showvminfo --machinereadable \"#{vmname}\" |grep ^SnapshotName| cut -d \"=\" -f 2").stdout
         snapshotlist=snapshotresult.gsub(/\"/,'').split(/\n/)
         return snapshotlist
       end

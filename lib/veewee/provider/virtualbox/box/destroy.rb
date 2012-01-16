@@ -33,7 +33,7 @@ module Veewee
           #PDB
           #vm.destroy()
 
-          command="#{@vboxcmd} unregistervm  '#{name}' --delete"
+          command="#{@vboxcmd} unregistervm  \"#{name}\" --delete"
           env.ui.info command
           env.ui.info "Deleting vm #{name}"
 
@@ -49,9 +49,9 @@ module Veewee
             if d.location.match(/#{location}/)
 
               if File.exists?(d.location)
-                command="#{@vboxcmd} closemedium disk '#{d.location}' --delete"
+                command="#{@vboxcmd} closemedium disk \"#{d.location}\" --delete"
               else
-                command="#{@vboxcmd} closemedium disk '#{d.location}'"
+                command="#{@vboxcmd} closemedium disk \"#{d.location}\""
               end
 
             #command="#{@vboxcmd} closemedium disk '#{d.location}' --delete"
